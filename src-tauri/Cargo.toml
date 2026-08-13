@@ -1,0 +1,25 @@
+[package]
+name = "open-cooldesigner"
+version = "0.1.0"
+description = "Studio créatif IA Windows local-first"
+authors = ["Open-Cooldesigner"]
+edition = "2021"
+
+[lib]
+name = "open_cooldesigner_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+keyring = { version = "3", features = ["windows-native"] }
+
+[features]
+# Cette fonctionnalité est utilisée pour les builds de production
+# et les builds de débogage avec hot-reload. Voir https://tauri.app/v1/guides/features/devtools
+custom-protocol = ["tauri/custom-protocol"]
