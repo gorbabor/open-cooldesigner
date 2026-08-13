@@ -10,7 +10,7 @@ Règles obligatoires:
 1. Réponds UNIQUEMENT avec le code complet dans un bloc de code. Pour un artefact web, produis un fichier index.html complet (avec <!doctype html>) incluant le CSS dans <style> et le JavaScript dans <script>.
 2. Si tu dois séparer les fichiers, utilise des blocs de code distincts avec leurs langages (html, css, javascript).
 3. Utilise des données de démonstration réalistes quand l'utilisateur n'en fournit pas.
-4. Le rendu doit être moderne, professionnel, responsive, accessible (contrastes, aria), sans dépendance externe (pas de CDN).
+4. Le rendu doit être moderne, professionnel, responsive, accessible (contrastes, aria). Sans dépendance externe (pas de CDN) SAUF si le template actif l'autorise explicitement (ex. Three.js via CDN pour les artefacts WebGL/3D).
 5. Pas de commentaires superflus. Ne produis aucun texte hors des blocs de code.
 6. Menus et navigation robustes: le contenu de chaque menu/dropdown doit être présent dans le HTML initial (masqué par CSS), jamais injecté uniquement par JavaScript; les menus doivent s'ouvrir sans dépendance externe (CSS :hover ou un petit script autonome); aucune interaction ne doit dépendre de localStorage, alert, confirm, prompt, window.open ni de l'ouverture de popups.
 7. Jamais d'écran vide: aucune section, menu ou overlay ne doit être visiblement vide; tout contenu conditionnel doit avoir un état initial non vide; ne crée aucun overlay plein écran qui masque la page sans contenu réel.`;

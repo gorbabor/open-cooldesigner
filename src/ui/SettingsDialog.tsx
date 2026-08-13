@@ -10,10 +10,10 @@ import { ModelStatusDot, TestingBadge } from "./ModelPicker";
 import { modelDisplayName } from "@/lib/modelNames";
 import { cn } from "@/lib/cn";
 import { isTauri } from "@/services/secretStorage";
-import { SKILLS, TEMPLATES } from "@/skills/registry";
+import { SKILLS } from "@/skills/registry";
 import { Eye, EyeOff, Pencil, X } from "lucide-react";
 
-type Tab = "provider" | "templates" | "skills";
+type Tab = "provider" | "skills";
 
 export default function SettingsDialog({
   open,
@@ -34,8 +34,6 @@ export default function SettingsDialog({
   const lastModelsScan = useAppStore((s) => s.lastModelsScan);
   const activeSkills = useAppStore((s) => s.activeSkills);
   const toggleSkill = useAppStore((s) => s.toggleSkill);
-  const activeTemplateId = useAppStore((s) => s.activeTemplateId);
-  const setActiveTemplate = useAppStore((s) => s.setActiveTemplate);
   const apiKeyStored = useAppStore((s) => s.apiKeyStored);
   const persistApiKey = useAppStore((s) => s.persistApiKey);
 
@@ -55,7 +53,6 @@ export default function SettingsDialog({
     value: string;
   } | null>(null);
   const [tab, setTab] = useState<Tab>("provider");
-  const [previewTemplate, setPreviewTemplate] = useState<string | null>(null);
   const keyInputRef = useRef<HTMLInputElement>(null);
 
   const autoTestTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -148,7 +145,6 @@ export default function SettingsDialog({
           {(
             [
               ["provider", "Fournisseur"],
-              ["templates", "Templates"],
               ["skills", "Skills"],
             ] as [Tab, string][]
           ).map(([id, label]) => (
@@ -166,54 +162,6 @@ export default function SettingsDialog({
             </button>
           ))}
         </div>
-
-        {tab === "templates" && (
-          <div>
-            <p className="mb-2 text-xs text-muted-foreground">
-              Le template sélectionné guide la structure des générations
-              (injecté dans le prompt système avec son exemple de référence).
-            </p>
-            <div className="max-h-[50vh] space-y-1 overflow-y-auto">
-              {TEMPLATES.map((t) => (
-                <div
-                  key={t.manifest.id}
-                  className={cn(
-                    "rounded-md border p-2",
-                    activeTemplateId === t.manifest.id && "border-primary bg-accent/40",
-                  )}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <button
-                      onClick={() => setActiveTemplate(t.manifest.id)}
-                      className="flex min-w-0 flex-1 flex-col text-left"
-                    >
-                      <span className="text-sm font-medium">{t.manifest.name}</span>
-                      <span className="text-[11px] text-muted-foreground">
-                        {t.manifest.description}
-                      </span>
-                    </button>
-                    <button
-                      onClick={() => setPreviewTemplate(
-                        previewTemplate === t.manifest.id ? null : t.manifest.id,
-                      )}
-                      className="shrink-0 rounded border px-2 py-0.5 text-[11px] text-muted-foreground hover:bg-muted"
-                    >
-                      {previewTemplate === t.manifest.id ? "Masquer" : "Preview"}
-                    </button>
-                  </div>
-                  {previewTemplate === t.manifest.id && t.exampleHtml && (
-                    <iframe
-                      title={`Preview ${t.manifest.name}`}
-                      sandbox="allow-scripts"
-                      srcDoc={t.exampleHtml}
-                      className="mt-2 h-48 w-full rounded border"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {tab === "skills" && (
           <div>

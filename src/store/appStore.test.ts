@@ -723,3 +723,71 @@ describe("appStore — design system par projet & clé API", () => {
     expect(s.apiKeyStored).toBe(true);
   });
 });
+
+describe("appStore — sélection de template (frontend)", () => {
+  beforeEach(() => {
+    vi.unstubAllGlobals();
+    localStorage.clear();
+    useAppStore.setState({
+      projects: [],
+      artifacts: [],
+      versions: [],
+      chat: [],
+      generations: [],
+      activeProjectId: null,
+      activeArtifactId: null,
+      generating: false,
+      error: null,
+      streamingText: "",
+      lastPrompt: null,
+      customModels: {},
+      lastTest: {},
+      apiKeyStored: false,
+      settings: {
+        provider: "openai",
+        model: "gpt-4o-mini",
+        apiKey: "sk-test",
+        baseUrl: "",
+        temperature: 0.7,
+        budgetUsd: null,
+      },
+    });
+  });
+
+  it("setActiveTemplate change et persiste le template actif", () => {
+    useAppStore.getState().setActiveTemplate("saas-landing");
+    expect(useAppStore.getState().activeTemplateId).toBe("saas-landing");
+    const raw = localStorage.getItem("open-cooldesigner") ?? "";
+    expect(raw).toContain('"activeTemplateId":"saas-landing"');
+  });
+
+  it("setActiveTemplate(null) désactive le template (libre)", () => {
+    useAppStore.getState().setActiveTemplate("kanban");
+    useAppStore.getState().setActiveTemplate(null);
+    expect(useAppStore.getState().activeTemplateId).toBeNull();
+    const raw = localStorage.getItem("open-cooldesigner") ?? "";
+    expect(raw).toContain('"activeTemplateId":null');
+  });
+
+  it("le template sélectionné est injecté dans le prompt de génération", async () => {
+    const fetchMock = mockOpenAI();
+    useAppStore.getState().createProject("P", "minimal");
+    useAppStore.getState().setActiveTemplate("kanban");
+    await useAppStore.getState().generate("un kanban");
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.messages[0].content as string).toContain(
+      "=== TEMPLATE: Tableau Kanban ===",
+    );
+  });
+
+  it("sans template actif, aucun bloc TEMPLATE dans le prompt", async () => {
+    const fetchMock = mockOpenAI();
+    useAppStore.getState().createProject("P", "minimal");
+    useAppStore.getState().setActiveTemplate(null);
+    await useAppStore.getState().generate("un dashboard");
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.messages[0].content as string).not.toContain("=== TEMPLATE:");
+  });
+});

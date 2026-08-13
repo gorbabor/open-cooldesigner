@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useAppStore, useProjectVersions } from "@/store/appStore";
 import { buildHtmlExport, buildZipExport, downloadBlob } from "@/services/exportService";
 import { estimateGenerationCost } from "@/services/costService";
-import { TEMPLATES } from "@/templates";
-import { suggestTemplate } from "@/skills/registry";
+import { QUICK_START_TEMPLATES } from "@/templates";
 import ModelPicker from "./ModelPicker";
 import DesignSystemPicker from "./DesignSystemPicker";
+import TemplatePicker from "./TemplatePicker";
+import CritiqueReportDialog from "./CritiqueReportDialog";
 import { Download, History, Loader2, RotateCcw, Send, Sparkles, GitCompareArrows } from "lucide-react";
 import { cn } from "@/lib/cn";
 
@@ -23,6 +24,7 @@ export default function ChatPanel() {  const activeProject = useAppStore((s) =>
   const restoreVersion = useAppStore((s) => s.restoreVersion);
   const duplicateVersion = useAppStore((s) => s.duplicateVersion);
   const selectArtifact = useAppStore((s) => s.selectArtifact);
+  const setActiveTemplate = useAppStore((s) => s.setActiveTemplate);
   const versions = useProjectVersions(activeProject?.id ?? null);
   const [prompt, setPrompt] = useState("");
   const [showVersions, setShowVersions] = useState(false);
@@ -80,10 +82,11 @@ export default function ChatPanel() {  const activeProject = useAppStore((s) =>
                 Démarrage rapide
               </p>
               <div className="flex flex-wrap gap-1.5">
-                {TEMPLATES.map((t) => (
+                {QUICK_START_TEMPLATES.map((t) => (
                   <button
                     key={t.id}
                     onClick={() => {
+                      if (t.skillTemplateId) setActiveTemplate(t.skillTemplateId);
                       setPrompt(t.name);
                       setBudgetWarning(null);
                       void generate(t.defaultSystemPrompt);
@@ -215,9 +218,11 @@ export default function ChatPanel() {  const activeProject = useAppStore((s) =>
       <div className="border-t p-2">
         <div className="mb-1.5 flex flex-wrap items-center justify-between gap-1.5">
           <ModelPicker compact />
-          <DesignSystemPicker />
+          <div className="flex items-center gap-1.5">
+            <DesignSystemPicker />
+            <TemplatePicker />
+          </div>
         </div>
-        <TemplateSuggestion prompt={prompt} />
         <div className="flex gap-2">
           <input
             value={prompt}
@@ -240,28 +245,6 @@ export default function ChatPanel() {  const activeProject = useAppStore((s) =>
         </div>
       </div>
     </aside>
-  );
-}
-
-function TemplateSuggestion({ prompt }: { prompt: string }) {
-  const setActiveTemplate = useAppStore((s) => s.setActiveTemplate);
-  const activeTemplateId = useAppStore((s) => s.activeTemplateId);
-  const trimmed = prompt.trim();
-  if (!trimmed) return null;
-  const suggested = suggestTemplate(trimmed);
-  if (!suggested || suggested.manifest.id === activeTemplateId) return null;
-  return (
-    <div className="mb-1.5 flex items-center gap-1.5 text-[10px] text-muted-foreground">
-      <span>
-        Template suggéré: <b>{suggested.manifest.name}</b>
-      </span>
-      <button
-        onClick={() => setActiveTemplate(suggested.manifest.id)}
-        className="rounded border px-1.5 py-0.5 text-[10px] text-primary hover:bg-muted"
-      >
-        Utiliser
-      </button>
-    </div>
   );
 }
 
@@ -357,19 +340,14 @@ function ExportButtons() {
         Export ZIP
       </button>
       {showReport && report && (
-        <div className="mt-2 rounded-md border bg-muted/50 p-2 text-[11px]">
-          <p className="mb-1 font-semibold">Rapport du critique</p>
-          <p>
-            Philo {report.scores.philosophy} · Hiérarchie {report.scores.hierarchy} · Détails{" "}
-            {report.scores.details} · Fonct. {report.scores.functionality} · Innov.{" "}
-            {report.scores.innovation}
-          </p>
-          {report.fix.length > 0 && (
-            <p className="mt-1">
-              <b>Corriger:</b> {report.fix.join(" · ")}
-            </p>
-          )}
-        </div>
+        <CritiqueReportDialog
+          report={report}
+          artifactTitle={artifact.title}
+          busy={generating}
+          onCritique={runCritique}
+          onAutoImprove={runAutoImprove}
+          onClose={() => setShowReport(false)}
+        />
       )}
       {notice && <span className="truncate text-[10px] text-muted-foreground">{notice}</span>}
       {cost && (

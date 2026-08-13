@@ -29,13 +29,46 @@ describe("registry skills", () => {
 });
 
 describe("registry templates", () => {
-  it("expose au moins 12 templates avec SKILL.md et example.html", () => {
-    expect(TEMPLATES.length).toBeGreaterThanOrEqual(12);
+  it("expose au moins 30 templates avec SKILL.md et example.html", () => {
+    expect(TEMPLATES.length).toBeGreaterThanOrEqual(30);
     for (const t of TEMPLATES) {
       expect(t.skillMd.length).toBeGreaterThan(30);
       expect(t.exampleHtml).toBeTruthy();
       expect(t.exampleHtml).toContain("<!doctype html>");
       expect(t.manifest.triggers.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("inclut les nouveaux templates (auth, chat-ui, ecommerce, quiz, 404, presentation…)", () => {
+    const ids = TEMPLATES.map((t) => t.manifest.id);
+    for (const id of [
+      "auth",
+      "chat-ui",
+      "ecommerce",
+      "portfolio",
+      "profile",
+      "event",
+      "quiz",
+      "travel",
+      "restaurant",
+      "404",
+      "newsletter",
+      "presentation",
+    ]) {
+      expect(ids).toContain(id);
+    }
+  });
+
+  it("inclut les templates de types avancés (clone-site, ui-mockup, wireframe, documents, dynamic)", () => {
+    const ids = TEMPLATES.map((t) => t.manifest.id);
+    for (const id of [
+      "clone-site",
+      "ui-mockup",
+      "wireframe",
+      "documents",
+      "dynamic",
+    ]) {
+      expect(ids).toContain(id);
     }
   });
 

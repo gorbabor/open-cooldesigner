@@ -182,4 +182,5 @@ export interface Template {
   name: string;
   description: string;
   defaultSystemPrompt: string;
+  skillTemplateId?: string;
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useAppStore } from "@/store/appStore";
 import {
   DESIGN_SYSTEMS,
@@ -8,8 +8,10 @@ import {
   buildDesignSystemPreviewHtml,
   buildDesignSystemThumbnailHtml,
 } from "@/designSystem/parser";
-import { Check, ChevronDown, Palette, X } from "lucide-react";
+import { Check, ChevronDown, Palette } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { useOutsideClick } from "@/lib/hooks";
+import PreviewDialog from "./PreviewDialog";
 
 export default function DesignSystemPicker() {
   const activeProjectId = useAppStore((s) => s.activeProjectId);
@@ -28,31 +30,13 @@ export default function DesignSystemPicker() {
   const [preview, setPreview] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
+  useOutsideClick(rootRef, () => setOpen(false), open);
+
   const currentId = activeProject?.designSystemId ?? defaultDesignSystemId;
   const current = DESIGN_SYSTEMS.find((ds) => ds.id === currentId) ?? null;
   const previewDs = preview
     ? DESIGN_SYSTEMS.find((ds) => ds.id === preview)
     : null;
-
-  useEffect(() => {
-    if (!open) return;
-    const onDocClick = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", onDocClick);
-    return () => document.removeEventListener("mousedown", onDocClick);
-  }, [open]);
-
-  useEffect(() => {
-    if (!preview) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setPreview(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [preview]);
 
   const select = (id: string) => {
     if (activeProjectId) setProjectDesignSystem(activeProjectId, id);
@@ -145,41 +129,12 @@ export default function DesignSystemPicker() {
       </div>
 
       {previewDs && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-          onClick={() => setPreview(null)}
-          role="dialog"
-          aria-label={`Démo du design system ${previewDs.name}`}
-        >
-          <div
-            className="flex h-[85vh] w-[90vw] flex-col overflow-hidden rounded-lg bg-card shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex shrink-0 items-center justify-between border-b px-4 py-2">
-              <div className="min-w-0">
-                <h2 className="text-sm font-semibold">{previewDs.name}</h2>
-                <p className="truncate text-xs text-muted-foreground">
-                  {previewDs.category} · {previewDs.description}
-                </p>
-              </div>
-              <div className="flex shrink-0 items-center gap-2">
-                <button
-                  onClick={() => setPreview(null)}
-                  className="rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
-                  title="Fermer (Échap)"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            </div>
-            <iframe
-              title={`Démo ${previewDs.name}`}
-              sandbox="allow-scripts"
-              srcDoc={buildDesignSystemPreviewHtml(previewDs)}
-              className="min-h-0 w-full flex-1 border-0"
-            />
-          </div>
-        </div>
+        <PreviewDialog
+          title={previewDs.name}
+          subtitle={`${previewDs.category} · ${previewDs.description}`}
+          srcDoc={buildDesignSystemPreviewHtml(previewDs)}
+          onClose={() => setPreview(null)}
+        />
       )}
     </>
   );
