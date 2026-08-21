@@ -100,6 +100,7 @@ interface AppState {
   critiqueArtifact: (artifactId: string) => Promise<CritiqueReport | null>;
   autoImprove: (artifactId: string) => Promise<Artifact | null>;
   setTweaks: (artifactId: string, tweaks: ArtifactTweaks) => void;
+  applyTweaksToProject: (projectId: string, tweaks: ArtifactTweaks) => void;
   addCustomModel: (provider: ProviderId, model: string) => boolean;
   removeCustomModel: (provider: ProviderId, model: string) => void;
   loadRemoteModels: (
@@ -357,6 +358,16 @@ export const useAppStore = create<AppState>()(
       setTweaks: (artifactId, tweaks) =>
         set({
           tweaks: { ...get().tweaks, [artifactId]: tweaks },
+        }),
+
+      applyTweaksToProject: (projectId, tweaks) =>
+        set((s) => {
+          const next = { ...s.tweaks };
+          const copy = structuredClone(tweaks);
+          for (const a of s.artifacts) {
+            if (a.projectId === projectId) next[a.id] = copy;
+          }
+          return { tweaks: next };
         }),
 
       addCustomModel: (provider, model) => {

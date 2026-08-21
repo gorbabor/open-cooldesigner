@@ -71,7 +71,14 @@ export interface CritiqueReport {
 
 export interface ArtifactTweaks {
   accent: string;
+  surface: string;
+  textColor: string;
+  pageBg: string;
+  fontFamily: string;
   typeScale: number;
   density: number;
-  theme: "light" | "dark";
+  radius: number;
+  theme: "light" | "dark" | "system";
+  hoverMotion: "none" | "subtle" | "elevated" | "playful";
+  chartTooltips: boolean;
 }

@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useAppStore } from "./appStore";
+import type { ArtifactTweaks } from "@/skills/types";
 
 const HTML_ANSWER =
   "```html\n<!doctype html><html><head><title>Dashboard Ventes</title></head><body><h1>Ventes</h1></body></html>\n```";
@@ -575,12 +576,46 @@ GAINS RAPIDES:
     const art = useAppStore.getState().artifacts[0];
     useAppStore.getState().setTweaks(art.id, {
       accent: "#ff0000",
+      surface: "#fafafa",
+      textColor: "#111111",
+      pageBg: "#ffffff",
+      fontFamily: "Georgia, serif",
       typeScale: 1.1,
       density: 0.8,
+      radius: 12,
       theme: "dark",
+      hoverMotion: "elevated",
+      chartTooltips: true,
     });
     expect(useAppStore.getState().tweaks[art.id].accent).toBe("#ff0000");
     expect(useAppStore.getState().tweaks[art.id].theme).toBe("dark");
+    expect(useAppStore.getState().tweaks[art.id].radius).toBe(12);
+    expect(useAppStore.getState().tweaks[art.id].hoverMotion).toBe("elevated");
+    expect(useAppStore.getState().tweaks[art.id].chartTooltips).toBe(true);
+  });
+
+  it("applyTweaksToProject applique les réglages à tous les artefacts du projet", () => {
+    useAppStore.getState().createProject("P", "minimal");
+    useAppStore.getState().createProject("Q", "minimal");
+    const p1 = useAppStore.getState().projects[0];
+    const artP1 = useAppStore.getState().artifacts[0];
+    const artP2 = useAppStore.getState().artifacts[1];
+    const tweaks: ArtifactTweaks = {
+      accent: "#123456",
+      surface: "#ffffff",
+      textColor: "#111111",
+      pageBg: "#f8fafc",
+      fontFamily: "system",
+      typeScale: 1,
+      density: 1,
+      radius: 8,
+      theme: "light",
+      hoverMotion: "subtle",
+      chartTooltips: false,
+    };
+    useAppStore.getState().applyTweaksToProject(p1.id, tweaks);
+    expect(useAppStore.getState().tweaks[artP1.id].accent).toBe("#123456");
+    expect(useAppStore.getState().tweaks[artP2.id]).toBeUndefined();
   });
 
   it("retryLastGenerate relance le dernier prompt après une erreur", async () => {
