@@ -3,6 +3,7 @@ export interface ParsedDesignSystem {
   name: string;
   category: string;
   description: string;
+  imported: boolean;
   designMd: string;
   tokens: {
     background: string;
@@ -48,6 +49,7 @@ export function parseDesignSystem(id: string, raw: string): ParsedDesignSystem {
     name: frontmatter.name ?? id,
     category: frontmatter.category ?? "Général",
     description: frontmatter.description ?? "",
+    imported: frontmatter.imported === "true",
     designMd: raw,
     tokens,
     tokensCss: buildTokensCss(tokens),

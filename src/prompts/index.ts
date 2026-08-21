@@ -1,6 +1,10 @@
 import type { DesignSystem } from "@/types";
+import type { Skill } from "@/skills/types";
 import * as designBriefModule from "@/skills/designBrief";
-import { getTemplate as getTemplateModule } from "@/skills/registry";
+import {
+  getSkill as getSkillModule,
+  getTemplate as getTemplateModule,
+} from "@/skills/registry";
 
 export const BASE_SYSTEM_PROMPT = `Tu es Open-Cooldesigner, un studio de création visuelle assistée par IA.
 
@@ -68,6 +72,22 @@ export function buildGenerationPrompt(
     if (template.exampleHtml) {
       extra += `\n\nExemple de structure de référence (inspire-toi de la structure, pas de copie littérale):\n${template.exampleHtml.slice(0, 3000)}`;
     }
+  }
+  const genericSkills = getSkillModule
+    ? activeSkills
+        .filter(
+          (id) =>
+            id !== "design-brief" &&
+            id !== "template-guide" &&
+            id !== "design-critic" &&
+            id !== "design-refine" &&
+            id !== "tweaks",
+        )
+        .map((id) => getSkillModule(id))
+        .filter((x): x is Skill => !!x)
+    : [];
+  for (const skill of genericSkills) {
+    extra += `\n\n=== SKILL ACTIF: ${skill.manifest.name} ===\n${skill.skillMd}\nApplique ces consignes à la génération.`;
   }
   return { system: `${system}${extra}`, user };
 }

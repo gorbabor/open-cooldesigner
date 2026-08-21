@@ -3,8 +3,8 @@ import { SKILLS, TEMPLATES, getSkill, getTemplate, suggestTemplate } from "./reg
 import { parseCritiqueReport } from "./critique";
 
 describe("registry skills", () => {
-  it("expose les 5 skills avec manifest complet", () => {
-    expect(SKILLS).toHaveLength(5);
+  it("expose les 10 skills avec manifest complet", () => {
+    expect(SKILLS).toHaveLength(10);
     const ids = SKILLS.map((s) => s.manifest.id);
     expect(ids).toEqual(
       expect.arrayContaining([
@@ -13,6 +13,11 @@ describe("registry skills", () => {
         "design-refine",
         "tweaks",
         "template-guide",
+        "web-clone",
+        "design-md",
+        "ui-ux-pro-max",
+        "creative-director",
+        "impeccable-design-polish",
       ]),
     );
     for (const s of SKILLS) {
@@ -29,13 +34,31 @@ describe("registry skills", () => {
 });
 
 describe("registry templates", () => {
-  it("expose au moins 30 templates avec SKILL.md et example.html", () => {
-    expect(TEMPLATES.length).toBeGreaterThanOrEqual(30);
+  it("expose au moins 40 templates avec SKILL.md et example.html", () => {
+    expect(TEMPLATES.length).toBeGreaterThanOrEqual(40);
     for (const t of TEMPLATES) {
       expect(t.skillMd.length).toBeGreaterThan(30);
       expect(t.exampleHtml).toBeTruthy();
       expect(t.exampleHtml).toContain("<!doctype html>");
       expect(t.manifest.triggers.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("inclut les templates importés d'Open Design (wireframe-annotated, mobile-onboarding, webgl-experience…)", () => {
+    const ids = TEMPLATES.map((t) => t.manifest.id);
+    for (const id of [
+      "wireframe-annotated",
+      "mobile-onboarding",
+      "social-carousel",
+      "email-marketing",
+      "contact-widget",
+      "image-poster",
+      "webgl-experience",
+      "live-dashboard",
+      "github-dashboard",
+      "team-okrs",
+    ]) {
+      expect(ids).toContain(id);
     }
   });
 

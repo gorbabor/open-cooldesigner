@@ -102,6 +102,110 @@ Quand un template est sélectionné :
 2. Utilise l'example.html comme référence structurelle (pas de copie littérale).
 3. Injecte ces consignes dans le prompt système de génération.`,
   },
+  {
+    manifest: {
+      id: "web-clone",
+      name: "Web Clone",
+      version: "1.0.0",
+      description:
+        "Guide la reproduction fidèle de la structure et du style d'un site existant décrit par l'utilisateur, sans jamais copier le contenu réel.",
+      triggers: ["clone", "reproduction", "comme le site", "même style que", "refaire le site"],
+      stage: "before",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Web Clone Skill
+
+Quand l'utilisateur demande de cloner/reproduire un site (nom, URL ou description) :
+1. Identifie les caractéristiques visuelles clés à reproduire : layout général,
+   palette, typographie, composants (nav, hero, grilles, footer).
+2. Ne copie JAMAIS le contenu textuel réel : utilise du texte de démonstration.
+3. N'accède jamais au réseau : se base uniquement sur la description.
+4. Produit une reproduction structurelle fidèle (même squelette, même ambiance),
+   pas une copie littérale.`,
+  },
+  {
+    manifest: {
+      id: "design-md",
+      name: "Design MD",
+      version: "1.0.0",
+      description:
+        "Génère un DESIGN.md complet (palette, typographie, composants) à partir d'un brief ou d'une marque, injecté dans les générations.",
+      triggers: ["design system", "design.md", "créer un design system", "tokens", "charte graphique"],
+      stage: "before",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Design MD Skill
+
+Quand l'utilisateur demande un design system ou une charte :
+1. Analyse le brief/marque et résous : palette (canvas, surface, texte, accent),
+   typographies (display, body), radius, espacements, densité.
+2. Produis une spec DESIGN.md structurée (sections 1-9 du format Open Design).
+3. Tous les tokens doivent être concrets (hex, familles, px) — jamais vagues.
+4. Le DESIGN.md généré devient la référence des générations suivantes.`,
+  },
+  {
+    manifest: {
+      id: "ui-ux-pro-max",
+      name: "UI/UX Pro Max",
+      version: "1.0.0",
+      description:
+        "Checklist de qualité UI/UX appliquée à chaque génération : hiérarchie, accessibilité, états, responsive, cohérence.",
+      triggers: ["ui ux", "qualité ui", "bonnes pratiques", "accessibilité", "checklist"],
+      stage: "during",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# UI/UX Pro Max Skill
+
+À chaque génération, applique cette checklist :
+1. Hiérarchie : un seul titre principal, sous-titres ordonnés, espacement cohérent.
+2. Accessibilité : contrastes WCAG AA, labels de formulaire, aria sur les interactifs.
+3. États : hover, focus visible, disabled, erreurs pour chaque composant interactif.
+4. Responsive : grilles fluides, breakpoints, cibles tactiles ≥ 44px.
+5. Cohérence : palette et typographie issues du design system, jamais inventées.
+Corrige tout écart AVANT de rendre le code.`,
+  },
+  {
+    manifest: {
+      id: "creative-director",
+      name: "Creative Director",
+      version: "1.0.0",
+      description:
+        "Direction artistique : élève le brief en une intention créative forte (concept, ambiance, signature visuelle).",
+      triggers: ["direction artistique", "concept créatif", "signature visuelle", "ambiance", "plus créatif"],
+      stage: "before",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Creative Director Skill
+
+Avant la génération :
+1. Formule une intention créative en une phrase (ex. « un espace calme et
+   éditorial où le produit est la star »).
+2. Déduis-en des choix concrets : ambiance (lumière, densité, rythme),
+   traitement typographique (display fort vs discret), micro-détails signatures.
+3. Intègre ces choix dans la spec de génération SANS déroger aux tokens
+   du design system (couleurs, fonts) — la créativité porte sur la mise en
+   scène, pas sur la palette.`,
+  },
+  {
+    manifest: {
+      id: "impeccable-design-polish",
+      name: "Impeccable Polish",
+      version: "1.0.0",
+      description:
+        "Finitions : alignements parfaits, micro-interactions, états soignés, zéro détail approximatif.",
+      triggers: ["finitions", "polish", "soigné", "détails", "perfection", "alignements"],
+      stage: "during",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Impeccable Design Polish Skill
+
+Passe finale avant de rendre le code :
+1. Alignements : grille respectée, espacements multiples du scale, pas de 17px ou 23px arbitraires.
+2. Micro-interactions : transitions 150ms sur hover/focus, courbes cohérentes.
+3. États complets : normal, hover, focus, active, disabled, vide, chargement.
+4. Zéro défaut : pas de texte tronqué, pas d'overflow accidentel, pas de contraste raté.
+5. L'artefact doit passer un examen « loupe » : chaque pixel est intentionnel.`,
+  },
 ];
 
 export const TEMPLATES: Template[] = [
@@ -528,6 +632,146 @@ Document imprimable (max 800px, prêt pour print) : en-tête (logo/nom, coordonn
     skillMd: `# Dynamic Artefact Template
 Artefact interactif ou animé : micro-animations CSS/JS, transitions fluides, parallaxe, défilement animé. Pour la 3D/WebGL : autorisé d'utiliser Three.js via CDN (exception à la règle « pas de CDN »), avec fallback gracieux si le chargement échoue. Le contenu doit rester lisible et accessible (prefers-reduced-motion).`,
     exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:system-ui,sans-serif;margin:0;background:#0f172a;color:#f8fafc;overflow-x:hidden}.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:2rem}.orb{width:160px;height:160px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#818cf8,#4f46e5);animation:float 4s ease-in-out infinite;margin-bottom:2rem;box-shadow:0 0 60px rgba(129,140,248,.5)}@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-22px) scale(1.05)}}.hero h1{font-size:2.6rem;margin:0 0 .6rem;animation:rise .8s ease-out both}.hero p{color:#94a3b8;animation:rise .8s .15s ease-out both}.btn{display:inline-block;background:#818cf8;color:#0f172a;padding:.8rem 1.8rem;border-radius:10px;font-weight:700;text-decoration:none;margin-top:1.2rem;transition:transform .2s,box-shadow .2s;animation:rise .8s .3s ease-out both}.btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(129,140,248,.4)}@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;max-width:900px;margin:auto;padding:3rem 1.5rem}.card{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:1.5rem;opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}.card.visible{opacity:1;transform:none}.card:hover{border-color:#818cf8}.card b{display:block;margin-bottom:.4rem}.card p{color:#94a3b8;font-size:.88rem;margin:0}@media (prefers-reduced-motion:reduce){.orb,.hero h1,.hero p,.btn{animation:none}.card{opacity:1;transform:none}}</style></head><body><section class="hero"><div class="orb"></div><h1>Artefact dynamique</h1><p>Micro-animations, défilement révélé, interactions fluides.</p><a class="btn" href="#cards">Découvrir ↓</a></section><section class="cards" id="cards"><div class="card"><b>Card 1</b><p>Apparaît au défilement avec une transition douce.</p></div><div class="card"><b>Card 2</b><p>Le survol éclaire la bordure.</p></div><div class="card"><b>Card 3</b><p>Respecte prefers-reduced-motion.</p></div></section><script>const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add("visible")}),{threshold:.2});document.querySelectorAll(".card").forEach(c=>io.observe(c));</script></body></html>`,
+  },
+  {
+    manifest: {
+      id: "wireframe-annotated",
+      name: "Maquette filaire annotée",
+      version: "1.0.0",
+      description: "Wireframe avec annotations de décision : zones, notes, flèches.",
+      triggers: ["wireframe annoté", "maquette annotée", "annotations", "notes de conception", "wireframe avec notes"],
+      kind: "web",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Wireframe Annotated Template
+Wireframe en niveaux de gris avec annotations de conception : chaque zone (nav, hero, sections) porte un label et une note expliquant la décision (ex. « CTA primaire ici — conversion »). Flèches et numéros pour relier les zones. Aucune couleur, aucun contenu réel.`,
+    exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:ui-monospace,monospace;margin:0;background:#fff;color:#374151;padding:2rem}.page{max-width:900px;margin:auto;border:2px dashed #9ca3af;border-radius:10px;padding:1.4rem}.zone{border:1px solid #d1d5db;background:#f9fafb;border-radius:6px;padding:.8rem;margin-bottom:1rem;position:relative}.tag{position:absolute;top:-.6rem;left:.6rem;background:#fff;font-size:.6rem;color:#6b7280;padding:0 .3rem;border:1px solid #d1d5db;border-radius:3px}.note{font-size:.62rem;color:#9ca3af;margin-top:.5rem;border-left:2px solid #d1d5db;padding-left:.5rem}.line{height:8px;background:#e5e7eb;border-radius:4px;margin:.3rem 0}.line.w{width:60%}.line.s{width:40%}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}.nav{display:flex;justify-content:space-between;align-items:center}.logo{width:70px;height:18px;background:#d1d5db;border-radius:3px}</style></head><body><div class="page"><div class="zone nav"><div class="logo"></div><span style="font-size:.65rem;color:#9ca3af">Lien 1 · Lien 2 · CTA</span><span class="tag">NAV — 01</span></div><div class="note">Ancre sticky. Logo à gauche, CTA à droite pour la conversion (pattern éprouvé).</div><div class="zone"><span class="tag">HERO — 02</span><div class="line w"></div><div class="line s"></div><div class="line" style="width:80%"></div></div><div class="note">Message principal + sous-titre. Le CTA reprend l'accent du design system.</div><div class="zone"><span class="tag">FONCTIONNALITÉS — 03</span><div class="grid3"><div><div class="line"></div><div class="line s"></div></div><div><div class="line"></div><div class="line s"></div></div><div><div class="line"></div><div class="line s"></div></div></div></div><div class="note">3 colonnes égales — hiérarchie par taille de titre, pas par couleur.</div><div class="zone"><span class="tag">FOOTER — 04</span><div class="line" style="width:50%"></div></div><div class="note">Liens secondaires + mentions légales. Fond différent de la page.</div></div></body></html>`,
+  },
+  {
+    manifest: {
+      id: "mobile-onboarding",
+      name: "Onboarding mobile",
+      version: "1.0.0",
+      description: "Écrans d'onboarding : points, illustrations, étapes.",
+      triggers: ["onboarding", "bienvenue app", "première utilisation", "tutoriel mobile", "intro app"],
+      kind: "web",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Mobile Onboarding Template
+Écrans d'onboarding dans un cadre téléphone : 3 étapes (bénéfice, démo, CTA), indicateur de progression (points), boutons Suivant/Passer, navigation par swipe ou clic. Illustrations simples en CSS. Respecte les tokens du DESIGN.md.`,
+    exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:system-ui,sans-serif;margin:0;background:#e2e8f0;display:flex;align-items:center;justify-content:center;min-height:100vh}.phone{width:330px;height:680px;background:#fff;border-radius:36px;border:8px solid #0f172a;overflow:hidden;position:relative;display:flex;flex-direction:column}.screen{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem}.screen.active{display:flex}.art{width:130px;height:130px;border-radius:30px;background:linear-gradient(135deg,#c7d2fe,#818cf8);display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin-bottom:1.5rem}.screen h1{font-size:1.4rem;margin:0 0 .5rem}.screen p{color:#64748b;font-size:.9rem;line-height:1.5;margin:0}.dots{display:flex;gap:.4rem;justify-content:center;padding:.8rem}.dot{width:8px;height:8px;border-radius:999px;background:#e2e8f0}.dot.on{background:#4f46e5}.btns{display:flex;gap:.6rem;padding:0 1.5rem 1.5rem}.btn{flex:1;padding:.7rem;border-radius:10px;border:0;font-weight:600;cursor:pointer;font-size:.9rem}.btn.primary{background:#4f46e5;color:#fff}.btn.ghost{background:transparent;color:#64748b}</style></head><body><div class="phone"><div class="screen active"><div class="art">📊</div><h1>Suivez vos objectifs</h1><p>Visualisez vos progrès en temps réel avec des graphiques clairs.</p></div><div class="screen"><div class="art">🔔</div><h1>Restez informé</h1><p>Recevez des rappels intelligents au bon moment, jamais trop.</p></div><div class="screen"><div class="art">🚀</div><h1>C'est parti</h1><p>Créez votre compte en 30 secondes et lancez-vous.</p></div><div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div><div class="btns"><button class="btn ghost" onclick="skip()">Passer</button><button class="btn primary" onclick="next()">Suivant</button></div></div><script>let i=0;const s=document.querySelectorAll(".screen"),d=document.querySelectorAll(".dot"),b=document.querySelector(".btns .primary");function show(){s.forEach((x,j)=>x.classList.toggle("active",j===i));d.forEach((x,j)=>x.classList.toggle("on",j===i));b.textContent=i===s.length-1?"Commencer":"Suivant"}function next(){i=Math.min(i+1,s.length-1);show()}function skip(){i=s.length-1;show()}</script></body></html>`,
+  },
+  {
+    manifest: {
+      id: "social-carousel",
+      name: "Carrousel réseaux sociaux",
+      version: "1.0.0",
+      description: "Carrousel de slides pour réseaux sociaux (Instagram, LinkedIn…).",
+      triggers: ["carrousel", "slides réseaux sociaux", "post carrousel", "instagram", "linkedin post", "contenu social"],
+      kind: "web",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Social Carousel Template
+Carrousel de slides 1:1 (format réseaux sociaux) : slide de couverture (titre accrocheur), 3-5 slides de contenu (points clés, chiffres, citations), slide finale (CTA, logo). Navigation par clic ou flèches, numéro de slide « 2/5 ». Design percutant, lisible en miniature.`,
+    exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:system-ui,sans-serif;margin:0;background:#0f172a;display:flex;align-items:center;justify-content:center;min-height:100vh}.carousel{width:420px;max-width:92vw;position:relative}.slide{display:none;aspect-ratio:1;border-radius:18px;background:#fff;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;box-sizing:border-box}.slide.active{display:flex}.slide .kicker{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:#4f46e5;font-weight:700;margin-bottom:.8rem}.slide h2{font-size:1.7rem;margin:0 0 .8rem;line-height:1.2}.slide p{color:#64748b;font-size:.95rem;margin:0}.big{font-size:3rem;font-weight:800;color:#0f172a;margin:.5rem 0}.cta{background:#4f46e5;color:#fff;padding:.7rem 1.6rem;border-radius:999px;font-weight:700;font-size:.9rem}.nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.9);border:0;border-radius:50%;width:38px;height:38px;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}.nav.prev{left:-46px}.nav.next{right:-46px}.counter{position:absolute;bottom:-30px;left:0;right:0;text-align:center;color:#64748b;font-size:.8rem}</style></head><body><div class="carousel"><div class="slide active"><div class="kicker">Design · 2026</div><h2>5 tendances UI qui dominent cette année</h2><p>Un carrousel pour briller sur LinkedIn</p></div><div class="slide"><div class="kicker">01</div><h2>Le dark mode n'est plus une option</h2><p>78% des apps leaders le proposent par défaut.</p></div><div class="slide"><div class="kicker">02</div><h2>Micro-interactions</h2><p>Le détail qui transforme l'expérience.</p></div><div class="slide"><div class="kicker">03</div><div class="big">−40%</div><h2>de temps de chargement</h2><p>grâce aux design systems compilés.</p></div><div class="slide"><div class="kicker">BONUS</div><h2>Suivez-moi pour la suite</h2><div class="cta">Voir le carrousel complet</div></div><button class="nav prev" onclick="mv(-1)">‹</button><button class="nav next" onclick="mv(1)">›</button><div class="counter"><span id="c">1</span>/5</div></div><script>let i=0;const s=document.querySelectorAll(".slide"),c=document.getElementById("c");function mv(d){i=(i+d+s.length)%s.length;s.forEach((x,j)=>x.classList.toggle("active",j===i));c.textContent=i+1}</script></body></html>`,
+  },
+  {
+    manifest: {
+      id: "email-marketing",
+      name: "Email marketing",
+      version: "1.0.0",
+      description: "Email promotionnel : offre, visuels, CTA, désinscription.",
+      triggers: ["email marketing", "email promo", "campagne promo", "email commercial", "promotion email"],
+      kind: "web",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Email Marketing Template
+Email promotionnel (max 600px, styles inline-friendly) : préheader, bandeau offre (visuel, titre, code promo), bloc produits ou avantages, CTA principal répété, preuve sociale, pied de page (désinscription, adresse). Ton persuasif mais honnête.`,
+    exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:system-ui,sans-serif;margin:0;background:#f1f5f9;padding:2rem}.mail{max-width:600px;margin:auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.06)}.pre{background:#0f172a;color:#94a3b8;text-align:center;font-size:.72rem;padding:.5rem}.hero{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;text-align:center;padding:2.4rem 1.5rem}.hero .tag{display:inline-block;background:rgba(255,255,255,.2);border-radius:999px;padding:.2rem .8rem;font-size:.72rem;font-weight:600;margin-bottom:.8rem}.hero h1{font-size:1.7rem;margin:0 0 .4rem}.hero p{opacity:.9;margin:0 0 1rem;font-size:.9rem}.cta{display:inline-block;background:#fff;color:#4f46e5;padding:.7rem 1.8rem;border-radius:999px;font-weight:700;text-decoration:none}.body{padding:1.6rem}.code{text-align:center;background:#f5f3ff;border:2px dashed #c4b5fd;border-radius:10px;padding:1rem;margin-bottom:1.4rem}.code b{font-size:1.3rem;letter-spacing:.1em;color:#4f46e5}.perks{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;text-align:center}.perk{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:.8rem;font-size:.78rem}.perk b{display:block;font-size:1rem;color:#0f172a}.cta2{display:block;text-align:center;background:#4f46e5;color:#fff;text-decoration:none;border-radius:10px;padding:.9rem;font-weight:700;margin-top:1.4rem}.foot{background:#f8fafc;text-align:center;padding:1rem;color:#94a3b8;font-size:.72rem}.foot a{color:#64748b;margin:0 .3rem}</style></head><body><div class="mail"><div class="pre">Offre exclusive réservée aux abonnés — vue dans le navigateur</div><div class="hero"><span class="tag">OFFRE D'ÉTÉ</span><h1>−25% sur tout le site</h1><p>Jusqu'au 31 août, avec le code ci-dessous</p><a class="cta" href="#">J'en profite</a></div><div class="body"><div class="code">Code : <b>ETE25</b></div><div class="perks"><div class="perk"><b>Livraison</b>offerte dès 50€</div><div class="perk"><b>Retours</b>30 jours gratuits</div><div class="perk"><b>Support</b>7j/7 réactif</div></div><a class="cta2" href="#">Découvrir les offres →</a></div><div class="foot">MaBoutique · 12 rue Exemple, 75001 Paris<br><a href="#">Se désabonner</a> · <a href="#">Préférences</a></div></div></body></html>`,
+  },
+  {
+    manifest: {
+      id: "contact-widget",
+      name: "Widget de contact",
+      version: "1.0.0",
+      description: "Widget flottant de contact : chat, formulaire, coordonnées.",
+      triggers: ["widget contact", "bouton contact", "chat flottant", "formulaire de contact", "nous contacter"],
+      kind: "web",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Contact Widget Template
+Widget flottant (coin bas-droit) : bouton rond avec icône, panneau dépliable (formulaire nom/email/message ou mini-chat), coordonnées (tél, email), confirmation d'envoi simulée. Accessible (aria), ouvert/fermé par clic, sans dépendance.`,
+    exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:system-ui,sans-serif;margin:0;background:#f8fafc;min-height:100vh;display:flex;align-items:center;justify-content:center;color:#0f172a}h1{font-size:1.5rem;color:#64748b}.fab{position:fixed;bottom:1.4rem;right:1.4rem;width:56px;height:56px;border-radius:50%;background:#4f46e5;color:#fff;border:0;font-size:1.5rem;cursor:pointer;box-shadow:0 8px 24px rgba(79,70,229,.4);z-index:40}.panel{position:fixed;bottom:5.5rem;right:1.4rem;width:300px;background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.15);padding:1.2rem;display:none;z-index:40}.panel.open{display:block}.panel h3{margin:0 0 .8rem;font-size:1rem}.panel input,.panel textarea{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:8px;padding:.55rem .7rem;margin-bottom:.6rem;font-size:.85rem;font-family:inherit}.panel input:focus,.panel textarea:focus{outline:none;border-color:#4f46e5}.panel button{width:100%;background:#4f46e5;color:#fff;border:0;border-radius:8px;padding:.6rem;font-weight:600;cursor:pointer}.coords{font-size:.75rem;color:#64748b;margin-top:.8rem;padding-top:.8rem;border-top:1px solid #e2e8f0}.ok{display:none;text-align:center;color:#16a34a;font-size:.85rem;padding:.6rem;background:#f0fdf4;border-radius:8px}.ok.show{display:block}</style></head><body><h1>Page d'exemple</h1><button class="fab" onclick="toggle()" aria-label="Contacter le support">💬</button><div class="panel" id="p"><h3>Comment pouvons-nous aider ?</h3><form id="f" onsubmit="send(event)"><input placeholder="Votre nom" required><input type="email" placeholder="Email" required><textarea rows="3" placeholder="Votre message…" required></textarea><button type="submit">Envoyer</button></form><div class="ok" id="ok">✓ Message envoyé, nous revenons vite !</div><div class="coords">📞 01 42 00 00 00<br>✉ support@exemple.com</div></div><script>function toggle(){document.getElementById("p").classList.toggle("open")}function send(e){e.preventDefault();document.getElementById("f").style.display="none";document.getElementById("ok").classList.add("show")}</script></body></html>`,
+  },
+  {
+    manifest: {
+      id: "image-poster",
+      name: "Affiche",
+      version: "1.0.0",
+      description: "Affiche / poster : titre fort, composition graphique, dates.",
+      triggers: ["affiche", "poster", "flyer", "annonce visuelle", "événement visuel"],
+      kind: "web",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Image Poster Template
+Affiche grand format (ratio portrait 3:4) : titre typographique massif, composition graphique (formes CSS, dégradés), informations clés (date, lieu, prix), CTA discret. Fort contraste, impact visuel immédiat, respecte les tokens du DESIGN.md.`,
+    exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:system-ui,sans-serif;margin:0;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}.poster{width:420px;max-width:90vw;aspect-ratio:3/4;background:linear-gradient(160deg,#f43f5e,#7c3aed 55%,#0f172a 55%);border-radius:6px;position:relative;overflow:hidden;color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:2rem;box-sizing:border-box}.ring{position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;border:28px solid rgba(255,255,255,.15)}.tag{font-size:.7rem;text-transform:uppercase;letter-spacing:.25em;opacity:.9}.title{font-size:2.6rem;font-weight:800;line-height:1.05;margin:.6rem 0;text-transform:uppercase}.sub{font-size:.85rem;opacity:.85;max-width:260px;line-height:1.5}.info{border-top:2px solid rgba(255,255,255,.6);padding-top:.8rem;font-size:.8rem;display:flex;justify-content:space-between;gap:1rem;text-transform:uppercase;letter-spacing:.06em}</style></head><body><div class="poster"><div class="ring"></div><div><div class="tag">Festival · Édition 2026</div><div class="title">Néons<br>en fête</div></div><div><div class="sub">Trois nuits de musique électronique, arts visuels et performances immersives.</div><div class="info"><span>14–16 NOV</span><span>PARIS</span><span>DÈS 25€</span></div></div></div></body></html>`,
+  },
+  {
+    manifest: {
+      id: "webgl-experience",
+      name: "Expérience WebGL",
+      version: "1.0.0",
+      description: "Expérience 3D immersive (Three.js via CDN, exception autorisée).",
+      triggers: ["webgl", "expérience 3d", "scene 3d", "three.js", "immersif", "objet 3d", "particules 3d"],
+      kind: "web",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# WebGL Experience Template
+Expérience 3D immersive avec Three.js via CDN (exception à la règle « pas de CDN », autorisée pour ce template). Règles : (1) charger Three.js depuis unpkg/jsdelivr avec fallback gracieux si le chargement échoue (message + rendu 2D) ; (2) scène simple et robuste (un objet, rotation douce, lumière) ; (3) overlay UI en HTML par-dessus le canvas ; (4) respecter prefers-reduced-motion ; (5) ne jamais bloquer l'interaction.`,
+    exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:system-ui,sans-serif;margin:0;overflow:hidden;background:#0a0a12;color:#f8fafc}canvas{display:block}.ui{position:fixed;bottom:2rem;left:2rem;z-index:10;background:rgba(10,10,18,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:1rem 1.4rem}.ui h1{font-size:1.1rem;margin:0 0 .2rem}.ui p{font-size:.8rem;color:#94a3b8;margin:0}.fallback{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0a0a12;z-index:5;display:none}.fallback.show{display:flex}.fallback p{max-width:360px;text-align:center;color:#94a3b8;font-size:.9rem}</style></head><body><div class="ui"><h1>Orbe 3D</h1><p>Faites glisser pour faire tourner</p></div><div class="fallback" id="fb"><p>WebGL indisponible — activez l'accélération matérielle pour voir la scène 3D.</p></div><script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script><script>if(typeof THREE==="undefined"){document.getElementById("fb").classList.add("show")}else{const scene=new THREE.Scene();const cam=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,100);cam.position.z=3;const ren=new THREE.WebGLRenderer({antialias:true});ren.setSize(innerWidth,innerHeight);ren.setPixelRatio(Math.min(devicePixelRatio,2));document.body.appendChild(ren.domElement);const geo=new THREE.IcosahedronGeometry(1.2,1);const mat=new THREE.MeshStandardMaterial({color:0x818cf8,metalness:.4,roughness:.25,flatShading:true});const mesh=new THREE.Mesh(geo,mat);scene.add(mesh);scene.add(new THREE.AmbientLight(0xffffff,.6));const l=new THREE.DirectionalLight(0xffffff,1.4);l.position.set(2,3,4);scene.add(l);let rx=0,ry=0;let dragging=false,px=0,py=0;addEventListener("mousedown",e=>{dragging=true;px=e.clientX;py=e.clientY});addEventListener("mouseup",()=>dragging=false);addEventListener("mousemove",e=>{if(!dragging)return;ry+=(e.clientX-px)*.01;rx+=(e.clientY-py)*.01;px=e.clientX;py=e.clientY});addEventListener("resize",()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();ren.setSize(innerWidth,innerHeight)});const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;function tick(){if(!reduce)mesh.rotation.y+=.005;mesh.rotation.x=rx;mesh.rotation.y+=ry;ren.render(scene,cam);requestAnimationFrame(tick)}tick()}</script></body></html>`,
+  },
+  {
+    manifest: {
+      id: "live-dashboard",
+      name: "Dashboard temps réel",
+      version: "1.0.0",
+      description: "Dashboard live : métriques qui bougent, flux, alertes.",
+      triggers: ["dashboard temps réel", "live dashboard", "monitoring temps réel", "flux live", "métriques en direct"],
+      kind: "web",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Live Dashboard Template
+Dashboard temps réel : KPI qui se mettent à jour toutes les N secondes (simulation JS), graphique en direct (sparkline animée), flux d'événements (liste qui s'enrichit), badge « LIVE ». Données simulées clairement, sans dépendance.`,
+    exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:system-ui,sans-serif;margin:0;background:#0f172a;color:#f8fafc;padding:1.5rem;min-height:100vh}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem}.live{display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:#f8fafc;background:#dc2626;border-radius:999px;padding:.25rem .8rem;font-weight:700}.live::before{content:"";width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse 1.2s infinite}@keyframes pulse{50%{opacity:.3}}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:1rem}.kpi{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:.9rem}.kpi small{color:#94a3b8;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}.kpi b{font-size:1.5rem;display:block;margin-top:.2rem}.kpi .delta{font-size:.75rem;color:#22c55e}.row{display:grid;grid-template-columns:2fr 1fr;gap:.8rem}.panel{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:1rem}.panel h3{margin:0 0 .8rem;font-size:.85rem;color:#94a3b8}.chart{display:flex;align-items:flex-end;gap:3px;height:120px}.bar{flex:1;background:linear-gradient(180deg,#818cf8,#4f46e5);border-radius:3px 3px 0 0;min-height:4px;transition:height .4s}.feed{list-style:none;margin:0;padding:0;font-size:.8rem;max-height:120px;overflow:hidden}.feed li{display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid #334155}.feed .t{color:#94a3b8;font-size:.7rem}</style></head><body><div class="head"><h1 style="margin:0;font-size:1.2rem">Ventes en direct</h1><span class="live">LIVE</span></div><div class="grid" id="kpis"></div><div class="row"><div class="panel"><h3>Activité (30 dernières s)</h3><div class="chart" id="chart"></div></div><div class="panel"><h3>Événements récents</h3><ul class="feed" id="feed"></ul></div></div><script>const N=12;const names=["Commande #","Inscription","Remboursement","Nouveau client"];let hist=Array(N).fill(12);function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}function kpi(label,val,delta){return '<div class="kpi"><small>'+label+'</small><b>'+val+'</b><span class="delta">'+delta+'</span></div>'}function draw(){let total=hist.reduce((a,b)=>a+b,0);document.getElementById("kpis").innerHTML=kpi("Ventes du jour","€"+(total*47).toLocaleString("fr-FR"),"▲ +12%")+kpi("Panier moyen","€"+Math.round(47+Math.sin(Date.now()/5000)*6).toLocaleString("fr-FR"),"▲ +3%")+kpi("Visiteurs",""+rand(800,1200),"▼ -2%")+kpi("Conversion",""+(3.2+Math.sin(Date.now()/8000)*.4).toFixed(1)+"%","▲ +0.4");hist.push(rand(6,40));hist.shift();document.getElementById("chart").innerHTML=hist.map(h=>'<div class="bar" style="height:'+(h/40*100)+'%"></div>').join("");const feed=document.getElementById("feed");const li=document.createElement("li");li.innerHTML="<span>"+names[rand(0,names.length-1)]+rand(1000,9999)+"</span><span class='t'>"+new Date().toLocaleTimeString("fr-FR")+"</span>";feed.prepend(li);while(feed.children.length>5)feed.removeChild(feed.lastChild)}draw();setInterval(draw,2500);</script></body></html>`,
+  },
+  {
+    manifest: {
+      id: "github-dashboard",
+      name: "Dashboard GitHub",
+      version: "1.0.0",
+      description: "Dashboard dev : repos, PRs, issues, activité.",
+      triggers: ["github", "dashboard dev", "pull requests", "issues", "repos", "activité dev"],
+      kind: "web",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# GitHub Dashboard Template
+Dashboard pour développeurs : en-tête (avatar, nom, stats repos/PRs/issues), liste des repos (nom, langue, stars), colonne PRs ouvertes (titre, branche, revues), issues récentes, graphique d'activité (barres par jour). Données de démo réalistes.`,
+    exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:system-ui,sans-serif;margin:0;background:#0d1117;color:#e6edf3;padding:1.5rem}.head{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem}.avatar{width:56px;height:56px;border-radius:50%;background:#1f6feb;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.3rem}.stats{display:flex;gap:1.5rem}.stats b{display:block;font-size:1.1rem}.stats small{color:#8b949e}.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:1rem}.card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:1rem;margin-bottom:1rem}.card h3{margin:0 0 .8rem;font-size:.85rem;color:#8b949e;text-transform:uppercase;letter-spacing:.05em}.repo{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid #21262d;font-size:.85rem}.repo .lang{font-size:.72rem;color:#8b949e}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.4rem}.pr{display:flex;align-items:center;gap:.6rem;padding:.45rem 0;border-bottom:1px solid #21262d;font-size:.82rem}.pr .st{color:#3fb950}.issue{display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid #21262d;font-size:.82rem;color:#8b949e}.activity{display:flex;align-items:flex-end;gap:3px;height:70px;margin-top:.6rem}.act{flex:1;background:#1f6feb;border-radius:2px;min-height:4px;opacity:.8}</style></head><body><div class="head"><div class="avatar">AD</div><div><b>Alex Dubois</b><br><small style="color:#8b949e">@alexdubois · 128 contributions cette semaine</small></div><div class="stats" style="margin-left:auto"><div><b>24</b><small>Repos</small></div><div><b>312</b><small>Étoiles</small></div><div><b>8</b><small>PRs ouvertes</small></div></div></div><div class="grid"><div><div class="card"><h3>Dépôts récents</h3><div class="repo"><span><span class="dot" style="background:#f1e05a"></span>open-cooldesigner</span><span class="lang">TypeScript · 42★</span></div><div class="repo"><span><span class="dot" style="background:#3572A5"></span>api-gateway</span><span class="lang">Python · 18★</span></div><div class="repo"><span><span class="dot" style="background:#e34c26"></span>landing-kit</span><span class="lang">HTML · 9★</span></div></div><div class="card"><h3>Activité</h3><div class="activity" id="act"></div></div></div><div><div class="card"><h3>Pull requests</h3><div class="pr"><span class="st">●</span>feat: design system tokens<span style="margin-left:auto;color:#8b949e">#128</span></div><div class="pr"><span class="st">●</span>fix: preview sandbox<span style="margin-left:auto;color:#8b949e">#127</span></div><div class="pr"><span class="st">●</span>docs: README v2<span style="margin-left:auto;color:#8b949e">#126</span></div></div><div class="card"><h3>Issues</h3><div class="issue"><span>Le parser ignore les rgba</span><span>#125</span></div><div class="issue"><span>Export ZIP trop lent</span><span>#124</span></div><div class="issue"><span>Dark mode tweaks</span><span>#123</span></div></div></div></div><script>document.getElementById("act").innerHTML=Array.from({length:28},()=>'<div class="act" style="height:'+(10+Math.random()*90)+'%"></div>').join("")</script></body></html>`,
+  },
+  {
+    manifest: {
+      id: "team-okrs",
+      name: "OKRs d'équipe",
+      version: "1.0.0",
+      description: "Tableau d'objectifs et résultats clés (OKR) d'équipe.",
+      triggers: ["okr", "objectifs", "résultats clés", "objectifs équipe", "suivi objectifs", "kpi équipe"],
+      kind: "web",
+      license: "Apache-2.0 (importé et adapté d'Open Design)",
+    },
+    skillMd: `# Team OKRs Template
+Tableau d'OKRs : objectif (titre + propriétaire + trimestre), 3-4 résultats clés par objectif avec barre de progression et valeur cible, statut (on track / at risk / behind), note de contexte. Design clair, données de démo réalistes.`,
+    exampleHtml: `<!doctype html><html lang="fr"><head><meta charset="UTF-8"><style>body{font-family:system-ui,sans-serif;margin:0;background:#f8fafc;color:#0f172a;padding:1.5rem}.wrap{max-width:860px;margin:auto}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem}.head h1{font-size:1.3rem;margin:0}.head small{color:#64748b}.okr{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1.2rem;margin-bottom:1rem}.obj{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem}.obj b{font-size:1rem}.badge{font-size:.68rem;font-weight:700;border-radius:999px;padding:.2rem .7rem}.badge.on{background:#f0fdf4;color:#16a34a}.badge.risk{background:#fef3c7;color:#d97706}.badge.behind{background:#fef2f2;color:#dc2626}.kr{display:flex;align-items:center;gap:.8rem;padding:.45rem 0}.kr .txt{flex:1;font-size:.85rem}.kr .txt small{color:#64748b;display:block}.bar{width:120px;height:7px;background:#e2e8f0;border-radius:999px;overflow:hidden;flex-shrink:0}.bar i{display:block;height:100%;background:#4f46e5;border-radius:999px}.kr .val{width:64px;text-align:right;font-size:.78rem;font-weight:600;color:#64748b}</style></head><body><div class="wrap"><div class="head"><h1>OKRs — Équipe Produit · T3 2026</h1><small>Mise à jour : 12 août</small></div><div class="okr"><div class="obj"><b>🎯 O1 — Accélérer l'activation des nouveaux utilisateurs</b><span class="badge on">On track</span></div><div class="kr"><span class="txt">KR1 — Atteindre 35% d'activation à J7<small>Propriétaire : Ana</small></span><div class="bar"><i style="width:71%"></i></div><span class="val">71% · 25/35</span></div><div class="kr"><span class="txt">KR2 — Réduire le temps d'onboarding à 3 min<small>Propriétaire : B. Diallo</small></span><div class="bar"><i style="width:55%"></i></div><span class="val">55% · 5,4 min</span></div><div class="kr"><span class="txt">KR3 — 20% de références entre utilisateurs<small>Propriétaire : Sarah</small></span><div class="bar"><i style="width:40%"></i></div><span class="val">40% · 8/20</span></div></div><div class="okr"><div class="obj"><b>🎯 O2 — Consolider la fiabilité de la plateforme</b><span class="badge risk">At risk</span></div><div class="kr"><span class="txt">KR1 — 99,9% de disponibilité<small>Propriétaire : Ops</small></span><div class="bar"><i style="width:82%"></i></div><span class="val">82% · 99,92%</span></div><div class="kr"><span class="txt">KR2 — Temps de réponse < 200ms p95<small>Propriétaire : Ops</small></span><div class="bar"><i style="width:45%"></i></div><span class="val">45% · 340ms</span></div></div></div></body></html>`,
   },
 ];
 

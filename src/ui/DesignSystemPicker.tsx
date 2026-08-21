@@ -92,7 +92,16 @@ export default function DesignSystemPicker() {
                         <span className="truncate">{ds.name}</span>
                       </span>
                       <span className="truncate text-[10px] text-muted-foreground">
-                        {ds.category} · {ds.description}
+                        {ds.category}
+                        {ds.imported && (
+                          <span
+                            className="ml-1 rounded bg-muted px-1 py-0.5 text-[9px] text-muted-foreground"
+                            title="Système importé d'Open Design (palette + typographie)"
+                          >
+                            importé
+                          </span>
+                        )}
+                        · {ds.description}
                       </span>
                     </button>
                     <button

@@ -481,6 +481,17 @@ describe("appStore — budget & retry", () => {
     expect(body.messages[0].content as string).not.toContain("DESIGN SPEC");
   });
 
+  it("injecte le skillMd des skills génériques actifs dans le prompt", async () => {
+    const fetchMock = mockOpenAI();
+    useAppStore.getState().createProject("P", "minimal");
+    useAppStore.getState().toggleSkill("ui-ux-pro-max");
+    await useAppStore.getState().generate("un dashboard");
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.messages[0].content as string).toContain("=== SKILL ACTIF");
+    expect(body.messages[0].content as string).toContain("UI/UX Pro Max");
+  });
+
   it("injecte le DESIGN.md du design system sélectionné (nouveau format)", async () => {
     const fetchMock = mockOpenAI();
     useAppStore.getState().createProject("P", "linear");

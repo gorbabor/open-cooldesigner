@@ -145,6 +145,16 @@ describe("helpers", () => {
     expect(isDark("#fff1f2")).toBe(false);
   });
 
+  it("parse le marqueur imported du frontmatter", () => {
+    const ds = parseDesignSystem(
+      "apple",
+      "---\nname: Apple\ncategory: Média\nimported: true\n---\n# Apple\n\n## Couleurs\n- **Canvas** (`#ffffff`)\n",
+    );
+    expect(ds.imported).toBe(true);
+    const local = parseDesignSystem("linear", FULL_FORMAT);
+    expect(local.imported).toBe(false);
+  });
+
   it("buildDesignSystemPreviewHtml produit une page avec palette et bouton", () => {
     const ds = parseDesignSystem("openai", FULL_FORMAT);
     const html = buildDesignSystemPreviewHtml(ds);
