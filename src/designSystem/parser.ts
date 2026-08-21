@@ -277,6 +277,16 @@ footer.foot a:hover{color:var(--text)}
   <span>© 2026 ${ds.name} — démo générée depuis DESIGN.md</span>
   <span><a href="#hero">Haut de page</a> · <a href="#composants">Composants</a> · <a href="#data">Données</a></span>
 </div></footer>
+<script>
+document.addEventListener('click', function (e) {
+  var a = e.target.closest('a[href^="#"]');
+  if (a) {
+    e.preventDefault();
+    var el = document.querySelector(a.getAttribute('href'));
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+});
+</script>
 </body></html>`;
 }
 

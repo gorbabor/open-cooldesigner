@@ -191,6 +191,14 @@ describe("helpers", () => {
     expect(html).toContain("--spacing:72px");
   });
 
+  it("buildDesignSystemPreviewHtml contient le script d'interception des ancres (sandbox)", () => {
+    const ds = parseDesignSystem("openai", FULL_FORMAT);
+    const html = buildDesignSystemPreviewHtml(ds);
+    expect(html).toContain("scrollIntoView");
+    expect(html).toContain("preventDefault");
+    expect(html).toContain("closest('a[href^=\"#\"]')");
+  });
+
   it("buildDesignSystemThumbnailHtml produit une vignette compacte avec les couleurs", () => {
     const ds = parseDesignSystem("openai", FULL_FORMAT);
     const html = buildDesignSystemThumbnailHtml(ds);
