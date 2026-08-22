@@ -261,18 +261,22 @@ function ExportButtons() {
   const critiques = useAppStore((s) => s.critiques);
   const activeSkills = useAppStore((s) => s.activeSkills);
   const generating = useAppStore((s) => s.generating);
+  const tweaks = useAppStore((s) => s.tweaks);
   const [notice, setNotice] = useState<string | null>(null);
   const [showReport, setShowReport] = useState(false);
 
+  const artifactTweaks = artifact ? tweaks[artifact.id] : undefined;
+
   const exportHtml = () => {
     if (!artifact) return;
-    downloadBlob(buildHtmlExport(artifact));
-    setNotice(`HTML exporté (${(buildHtmlExport(artifact).sizeBytes / 1024).toFixed(1)} Ko)`);
+    const result = buildHtmlExport(artifact, artifactTweaks);
+    downloadBlob(result);
+    setNotice(`HTML exporté (${(result.sizeBytes / 1024).toFixed(1)} Ko)`);
   };
 
   const exportZip = async () => {
     if (!artifact) return;
-    const result = await buildZipExport(artifact);
+    const result = await buildZipExport(artifact, artifactTweaks);
     downloadBlob(result);
     setNotice(`ZIP exporté (${(result.sizeBytes / 1024).toFixed(1)} Ko)`);
   };

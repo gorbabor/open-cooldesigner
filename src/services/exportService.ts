@@ -1,4 +1,6 @@
 import type { Artifact } from "@/types";
+import type { ArtifactTweaks } from "@/skills/types";
+import { buildTweakInjection } from "@/lib/tweakInjection";
 import JSZip from "jszip";
 
 export interface ExportResult {
@@ -8,25 +10,47 @@ export interface ExportResult {
   sizeBytes: number;
 }
 
-export function buildHtmlExport(artifact: Artifact): ExportResult {
-  const main = artifact.files.find((f) => f.path === "index.html") ?? artifact.files[0];
+export function buildHtmlExport(
+  artifact: Artifact,
+  tweaks?: ArtifactTweaks,
+): ExportResult {
+  const main =
+    artifact.files.find((f) => f.path === "index.html") ?? artifact.files[0];
+  const content = tweaks
+    ? injectTweaks(main.content, tweaks)
+    : main.content;
   return {
     fileName: `${safeName(artifact.title)}.html`,
     mimeType: "text/html",
-    blob: new Blob([main.content], { type: "text/html;charset=utf-8" }),
-    sizeBytes: new Blob([main.content]).size,
+    blob: new Blob([content], { type: "text/html;charset=utf-8" }),
+    sizeBytes: new Blob([content]).size,
   };
+}
+
+function injectTweaks(html: string, tweaks: ArtifactTweaks): string {
+  const injection = buildTweakInjection(tweaks);
+  if (html.includes("</head>")) {
+    return html.replace("</head>", `${injection}</head>`);
+  }
+  return `${injection}\n${html}`;
 }
 
 export function buildZipExportFileName(title: string): string {
   return `${safeName(title)}.zip`;
 }
 
-export async function buildZipExport(artifact: Artifact): Promise<ExportResult> {
+export async function buildZipExport(
+  artifact: Artifact,
+  tweaks?: ArtifactTweaks,
+): Promise<ExportResult> {
   const zip = new JSZip();
   const root = zip.folder(safeName(artifact.title)) ?? zip;
   for (const file of artifact.files) {
-    root.file(file.path, file.content);
+    const content =
+      tweaks && file.path === "index.html"
+        ? injectTweaks(file.content, tweaks)
+        : file.content;
+    root.file(file.path, content);
   }
   const blob = await zip.generateAsync({ type: "blob" });
   return {

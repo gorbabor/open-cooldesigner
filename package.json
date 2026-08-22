@@ -1,7 +1,7 @@
 {
   "name": "open-cooldesigner",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "description": "Studio créatif IA Windows local-first — génération, modification et export d'artefacts visuels",
   "scripts": {
